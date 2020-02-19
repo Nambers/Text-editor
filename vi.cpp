@@ -8,10 +8,11 @@
 #include <io.h>
 #include <fstream>
 #include <string>
-#define MAX 1024
+
+#define MAX 1023
 using namespace std;
 
-char buffer[1024][1024];
+unsigned char buffer[1024][1024];
 void move_l(int h,int pos) {
     int a = 1;
     while (1) {
@@ -53,7 +54,7 @@ void pout(int h, int pos=-1,bool all=false) {
     int a = 0;
     while (1) {
         if (buffer[h][a] == '\0') break;
-        cout<<buffer[h][a];
+        cout.put(buffer[h][a]);
         a++;
     }
     if (pos != -1) gotoxy(pos,h);
@@ -104,7 +105,7 @@ int main(int argc, char* argv[]) {
             exit(EXIT_FAILURE);
         }
     }
-    char ch;
+    unsigned char ch;
     bool c,quit;
 s:;
     char co[3];
@@ -166,9 +167,23 @@ s:;
         h++;
     }
     fin.close();
+    unsigned char ch1;
+    ch ='\0';
+    ch1='\0';
+    bool chc = false;
     while (1) {
         if (_kbhit()) {
+            ch = '\0';
             ch = _getch();
+            if (ch > 128&&!chc) {//汉字
+                ch1 = _getch();
+                chc = true;
+            }
+            else if (chc){
+                chc = false;
+                continue;
+            }
+            
             //操控
             if(ch==-32){
             }
@@ -192,11 +207,13 @@ s:;
             }
             else if ( ch == 75) {//左
                 pos--;
+                if (buffer[h][pos] > 128)pos--;
                 if (pos < 0)pos = 0;
                 gotoxy(pos, h);
             }
             else if ( ch == 77) {//右
                 pos++;
+                if (buffer[h][pos] > 128)pos++;
                 if (buffer[h][pos]=='\0')pos--;
                 gotoxy(pos, h);
             }
@@ -218,23 +235,35 @@ s:;
                     }
                     pout(h ,-1 ,true);
                 }
-                else if (ch == 8) {
+                else if (ch == 8) {//退格符
                     if (pos >= 1) {
-                        move_l(h, pos);
-                        pos--;
-                        pout(h, pos);
+                        if(buffer[h][pos]>128){//汉字
+                            move_l(h, pos);
+                            pos--;
+                            move_l(h, pos);
+                            pos--;
+                        }
+                        else {//非汉字
+                            move_l(h, pos);
+                            pos--;
+                            pout(h, pos);
+                        }
                     }
                 }
-                else {
-                    if(buffer[h][pos+2]!='\0'){
-                        move_r(h,pos++,ch);
-                        pout(h);
-                    }
-                    else if (pos < MAX) {
-                        buffer[h][pos++] = ch;
-                        buffer[h][pos + 1] = '\0';
-                        pout(h);
-                    }
+                else {//读入
+
+                        if (buffer[h][pos + 2] != '\0') {//插入在中间
+                            if (ch > 128) move_r(h, pos++, ch1);
+                            move_r(h, pos++, ch);
+                            pout(h);
+                        }
+                        else if (pos < MAX) {//插入在句尾
+                            if (ch > 128)buffer[h][pos++] = ch1;
+                            buffer[h][pos++] = ch;
+                            buffer[h][pos + 1] = '\0';
+                            pout(h);
+                        }
+                    
                 }
                 gotoxy(0, h + 5);
                 printf("%c[2K", 27);

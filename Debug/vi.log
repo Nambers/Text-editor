@@ -1,0 +1,4 @@
+﻿  vi.cpp
+C:\Users\19308\Desktop\C++-VI\vi\vi.cpp(39,19): warning C4838: 从“int”转换到“SHORT”需要收缩转换
+C:\Users\19308\Desktop\C++-VI\vi\vi.cpp(39,21): warning C4838: 从“int”转换到“SHORT”需要收缩转换
+  vi.vcxproj -> C:\Users\19308\Desktop\C++-VI\vi\Debug\vi.exe
