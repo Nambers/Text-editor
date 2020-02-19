@@ -12,3 +12,11 @@ windows10+Microsoft Visual Studio 2019
 
 使用方法:
 使用cmd到vi.exe目录下，输入 vi 文件名 可以编辑或新建文件，例：vi a.txt
+
+重要更新:
+
+2020.2.19
+支持中文文字输入
+
+2020.2.11
+本项目开始开发
