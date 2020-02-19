@@ -11,7 +11,7 @@ blog   博客:https://me.csdn.net/qq_40832960
 windows10+Microsoft Visual Studio 2019
 
 使用方法:
-使用cmd到vi.exe目录下，输入 vi 文件名 可以编辑或新建文件，例：vi a.txt
+使用cmd到vi.exe目录下，输入 "vi 文件名" 可以编辑或新建文件，例：vi C:/a.txt
 
 重要更新:
 
