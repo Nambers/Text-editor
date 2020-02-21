@@ -167,23 +167,10 @@ s:;
         h++;
     }
     fin.close();
-    unsigned char ch1;
-    ch ='\0';
-    ch1='\0';
-    bool chc = false;
     while (1) {
         if (_kbhit()) {
             ch = '\0';
             ch = _getch();
-            if (ch > 128&&!chc) {//汉字
-                ch1 = _getch();
-                chc = true;
-            }
-            else if (chc){
-                chc = false;
-                continue;
-            }
-            
             //操控
             if(ch==-32){
             }
@@ -207,8 +194,8 @@ s:;
             }
             else if ( ch == 75) {//左
                 pos--;
-                if (buffer[h][pos] > 128)pos--;
                 if (pos < 0)pos = 0;
+                else if (buffer[h][pos] > 128)pos--;
                 gotoxy(pos, h);
             }
             else if ( ch == 77) {//右
@@ -253,18 +240,17 @@ s:;
                 else {//读入
 
                         if (buffer[h][pos + 2] != '\0') {//插入在中间
-                            if (ch > 128) move_r(h, pos++, ch1);
                             move_r(h, pos++, ch);
                             pout(h);
                         }
                         else if (pos < MAX) {//插入在句尾
-                            if (ch > 128)buffer[h][pos++] = ch1;
                             buffer[h][pos++] = ch;
                             buffer[h][pos + 1] = '\0';
                             pout(h);
                         }
                     
                 }
+            /*输出行号及位置*/
                 gotoxy(0, h + 5);
                 printf("%c[2K", 27);
                 cout << "(" << h << "," << pos << ")";
